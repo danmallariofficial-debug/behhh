@@ -1,0 +1,161 @@
+@import "tailwindcss" source("../");
+
+@theme {
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans: 'Nunito', system-ui, sans-serif;
+  --font-hand: 'Caveat', cursive;
+
+  --color-lav-50: #f7f4fc;
+  --color-lav-100: #eee8f8;
+  --color-lav-200: #ddd1f1;
+  --color-lav-300: #c6b3e6;
+  --color-lav-400: #ad93d8;
+  --color-lav-500: #9273c6;
+  --color-lav-600: #7a5bb0;
+  --color-lav-700: #634891;
+  --color-lav-800: #4d3870;
+
+  --color-ash-50: #f6f6f7;
+  --color-ash-100: #ececee;
+  --color-ash-200: #d9d9dd;
+  --color-ash-300: #b9b9c0;
+  --color-ash-400: #93939c;
+  --color-ash-500: #74747e;
+  --color-ash-600: #5c5c65;
+  --color-ash-700: #47474f;
+  --color-ash-800: #2f2f35;
+  --color-ash-900: #1f1f23;
+}
+
+/* Soft dark mode: the gray scale flips and lavender gets a little deeper.
+   "white" becomes the dark surface, so white text on buttons turns dark too. */
+.dark {
+  color-scheme: dark;
+  --color-white: #1d1b23;
+
+  --color-lav-50: #262132;
+  --color-lav-100: #2f2840;
+  --color-lav-200: #41375a;
+  --color-lav-300: #5b4d7e;
+  --color-lav-400: #8a73b8;
+  --color-lav-500: #a088d2;
+  --color-lav-600: #ab94dc;
+  --color-lav-700: #c3b2e8;
+  --color-lav-800: #d8cdf2;
+
+  --color-ash-50: #24222a;
+  --color-ash-100: #2c2a33;
+  --color-ash-200: #3a3842;
+  --color-ash-300: #55535e;
+  --color-ash-400: #85838f;
+  --color-ash-500: #a3a1ac;
+  --color-ash-600: #bebcc6;
+  --color-ash-700: #d2d0d9;
+  --color-ash-800: #e4e2ea;
+  --color-ash-900: #f3f1f7;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  color: var(--color-ash-800);
+  background:
+    radial-gradient(1200px 600px at 85% -10%, var(--color-lav-100), transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, var(--color-ash-100), transparent 60%),
+    #fbfafc;
+  -webkit-font-smoothing: antialiased;
+}
+.dark body {
+  background:
+    radial-gradient(1200px 600px at 85% -10%, #2a2338, transparent 60%),
+    radial-gradient(900px 500px at -10% 30%, #1f1e25, transparent 60%),
+    #141318;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--color-ash-200);
+  border-radius: 1.5rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 12px 30px -18px rgba(77, 56, 112, 0.35);
+  backdrop-filter: blur(6px);
+}
+.dark .card {
+  background: rgba(32, 30, 39, 0.82);
+  box-shadow: 0 12px 30px -18px rgba(0, 0, 0, 0.7);
+}
+
+.field {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid var(--color-ash-200);
+  background: var(--color-white);
+  padding: 0.65rem 0.9rem;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+.field:focus {
+  border-color: var(--color-lav-400);
+  box-shadow: 0 0 0 4px var(--color-lav-100);
+}
+
+/* "Who picks?" coin */
+.coin {
+  position: relative;
+  transform-style: preserve-3d;
+  cursor: pointer;
+}
+.coin-face {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  border-radius: 9999px;
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  backface-visibility: hidden;
+  box-shadow: inset 0 0 0 5px rgba(255, 255, 255, 0.35), 0 10px 20px -10px rgba(0, 0, 0, 0.45);
+}
+.coin-back {
+  transform: rotateY(180deg);
+}
+
+@keyframes float-up {
+  0% { transform: translateY(0) scale(0.6) rotate(0deg); opacity: 0; }
+  10% { opacity: 1; }
+  100% { transform: translateY(-110vh) scale(1.1) rotate(25deg); opacity: 0; }
+}
+.heart-float {
+  position: fixed;
+  bottom: -40px;
+  pointer-events: none;
+  animation: float-up 3.6s ease-in forwards;
+  z-index: 60;
+}
+
+@keyframes pop-in {
+  from { transform: translateY(8px) scale(0.97); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.pop-in { animation: pop-in 0.35s ease-out both; }
+
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  15% { transform: scale(1.18); }
+  30% { transform: scale(1); }
+  45% { transform: scale(1.12); }
+}
+.beat { animation: beat 1.8s ease-in-out infinite; display: inline-block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .beat, .heart-float, .pop-in { animation: none; }
+}
+
+/* Passcode screen: `locked` is set on <html> before first paint (see src/lib/look.ts). */
+.gate { display: none; }
+html.locked .gate { display: grid; }
+html.locked #app { display: none; }

@@ -1,0 +1,11 @@
+# A private little site for two. Link previews are welcome, crawlers aren't.
+User-agent: Twitterbot
+User-agent: facebookexternalhit
+User-agent: Slackbot
+User-agent: WhatsApp
+User-agent: TelegramBot
+User-agent: Discordbot
+Allow: /
+
+User-agent: *
+Disallow: /
